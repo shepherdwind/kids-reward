@@ -31,6 +31,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.23)
+  dotenv-expand:
+    specifier: ^11.0.4
+    version: 11.0.4
   postcss:
     specifier: ^8.4.23
     version: 8.4.23
@@ -882,10 +885,22 @@ packages:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
     dev: true
 
+  /dotenv-expand@11.0.4:
+    resolution: {integrity: sha512-1a/jdB9ZFVtAxt8QvXkLmIAcQw1lqAg+KaRB0Eh2BaG0yHCSUUPttyuPFqH36WhZvEVpjghSfUaobNzisuH4Ng==}
+    engines: {node: '>=12'}
+    dependencies:
+      dotenv: 16.4.4
+    dev: true
+
   /dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
     dev: false
+
+  /dotenv@16.4.4:
+    resolution: {integrity: sha512-XvPXc8XAQThSjAbY6cQ/9PcBXmFoWuw1sQ3b8HqUCR6ziGXjkTi//kB9SWa2UwqlgdAIuRqAa/9hVljzPehbYg==}
+    engines: {node: '>=12'}
+    dev: true
 
   /electron-to-chromium@1.4.378:
     resolution: {integrity: sha512-RfCD26kGStl6+XalfX3DGgt3z2DNwJS5DKRHCpkPq5T/PqpZMPB1moSRXuK9xhkt/sF57LlpzJgNoYl7mO7Z6w==}
