@@ -1,57 +1,56 @@
-<script>
-	import ms from 'ms';
-	/**
-	 * @type {{id: string, name: string, email: string, image: string, createdAt: string}[]}
-	 */
-	export let users;
-	/**
-	 * @type {number}
-	 */
-	export let duration;
+<script lang="ts">
+  import ms from "ms";
+  import {
+    AvatarImage,
+    AvatarFallback,
+    Avatar,
+  } from "$lib/components/ui/avatar";
+  import * as Tabs from "$lib/components/ui/tabs";
+  import StarIcon from "./star.svelte";
+  import type { User } from "../database/type";
+  export let users: User[];
+  /**
+   * @type {number}
+   */
+  export let duration: number;
 
-	/**
-	 * @param {string | number | Date} timestamp
-	 * @param {undefined} [timeOnly]
-	 */
-	function timeAgo(timestamp, timeOnly) {
-		if (!timestamp) return 'never';
-		return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? '' : ' ago'}`;
-	}
-	function refreshPage() {
-		location.reload();
-	}
+  function timeAgo(timestamp: Date, timeOnly = false) {
+    if (!timestamp) return "never";
+    return `${ms(Date.now() - new Date(timestamp).getTime())}${
+      timeOnly ? "" : " ago"
+    }`;
+  }
+
+  function refreshPage() {
+    location.reload();
+  }
 </script>
 
 <div
-	class="w-full max-w-xl p-12 mx-auto rounded-lg shadow-xl dark:bg-white/10 bg-white/30 ring-1 ring-gray-900/5 backdrop-blur-lg"
+  class="w-full max-w-xl p-1 mx-auto rounded-lg dark:bg-white/10 bg-white/30 ring-1 ring-gray-900/5"
 >
-	<div class="flex items-center justify-between mb-4">
-		<div class="space-y-1">
-			<h2 class="text-xl font-semibold">Recent Users</h2>
-			<p class="text-sm text-gray-500">
-				Fetched {users.length} users in {duration ? duration : 'unknown'} ms
-			</p>
-		</div>
-		<button on:click={refreshPage}>Refresh Page</button>
-	</div>
-	<div class="divide-y divide-gray-900/5">
+  <Tabs.Root class="divide-y divide-gray-900/5">
+    <Tabs.List>
+      {#each users as user (user.id)}
+        <Tabs.Trigger value={user.name} class="flex items-center">
+          <Avatar>
+            <AvatarImage alt={user.name} src={user.image} />
+            <AvatarFallback>{user.name}</AvatarFallback>
+          </Avatar>
+          <div>
+            <h2 class="text-lg font-semibold">{user.name}</h2>
+            <div class="flex items-center">
+              <StarIcon className="text-yellow-400 w-5 h-5" />
+              <span class="text-yellow-600 font-semibold mx-1">2</span>
+              <StarIcon className="text-gray-400 w-5 h-5" />
+              <span class="text-gray-600 font-semibold">0</span>
+            </div>
+          </div>
+        </Tabs.Trigger>
+      {/each}
+    </Tabs.List>
 		{#each users as user (user.id)}
-			<div class="flex items-center justify-between py-3">
-				<div class="flex items-center space-x-4">
-					<img
-						src={user.image}
-						alt={user.name}
-						width={48}
-						height={48}
-						class="rounded-full ring-1 ring-gray-900/5"
-					/>
-					<div class="space-y-1">
-						<p class="font-medium leading-none">{user.name}</p>
-						<p class="text-sm text-gray-500">{user.email}</p>
-					</div>
-				</div>
-				<p class="text-sm text-gray-500">{timeAgo(user.createdAt)}</p>
-			</div>
+			<Tabs.Content value={user.name}>{user.name}</Tabs.Content>
 		{/each}
-	</div>
+  </Tabs.Root>
 </div>
