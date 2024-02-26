@@ -26,18 +26,16 @@
   }
 </script>
 
-<div
-  class="w-full max-w-xl p-1 mx-auto rounded-lg dark:bg-white/10 bg-white/30 ring-1 ring-gray-900/5"
->
+<div class="w-full max-w-xl p-2">
   <Tabs.Root class="divide-y divide-gray-900/5">
-    <Tabs.List>
+    <Tabs.List class="w-full">
       {#each users as user (user.id)}
-        <Tabs.Trigger value={user.name} class="flex items-center">
+        <Tabs.Trigger value={user.name} class="w-1/2">
           <Avatar>
             <AvatarImage alt={user.name} src={user.image} />
             <AvatarFallback>{user.name}</AvatarFallback>
           </Avatar>
-          <div>
+          <div class="text-left pl-2">
             <h2 class="text-lg font-semibold">{user.name}</h2>
             <div class="flex items-center">
               <StarIcon className="text-yellow-400 w-5 h-5" />

@@ -56,6 +56,9 @@ const config = {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans]
+			},
+			width: {
+				'1/7': '14.28%'
 			}
 		}
 	},

@@ -8,6 +8,6 @@
 	export { className as class };
 </script>
 
-<CalendarPrimitive.GridHead class={cn(className)} {...$$restProps}>
+<CalendarPrimitive.GridHead class={cn("", className)} {...$$restProps}>
 	<slot />
 </CalendarPrimitive.GridHead>

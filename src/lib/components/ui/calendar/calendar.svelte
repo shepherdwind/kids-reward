@@ -33,7 +33,7 @@
 		{#each months as month}
 			<Calendar.Grid>
 				<Calendar.GridHead>
-					<Calendar.GridRow class="flex">
+					<Calendar.GridRow>
 						{#each weekdays as weekday}
 							<Calendar.HeadCell>
 								{weekday.slice(0, 2)}

@@ -6,13 +6,15 @@
 </script>
 
 <main
-  class="relative flex flex-col items-center justify-center min-h-screen py-10"
+  class="relative flex flex-col items-center min-h-screen py-2"
 >
   <h1
-    class="pt-4 pb-8 dark:from-white from-black text-center text-4xl font-medium"
+    class="pt-4 pb-4 dark:from-white from-black text-center text-4xl font-medium"
   >
     Reward
   </h1>
   <Table users={data?.users} duration={data?.duration} />
-  <Calendar class="rounded-md border shadow" mode="single" />
+  <div class="p-2 w-full">
+    <Calendar class="rounded-md border shadow w-full" mode="single" />
+  </div>
 </main>
