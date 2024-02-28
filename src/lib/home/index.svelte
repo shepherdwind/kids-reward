@@ -6,8 +6,9 @@
     Avatar,
   } from "$lib/components/ui/avatar";
   import * as Tabs from "$lib/components/ui/tabs";
-  import StarIcon from "./star.svelte";
-  import type { User } from "../database/type";
+  import StarIcon from "../star.svelte";
+  import UserPanel from "./user.svelte";
+  import type { User } from "../../database/type";
   export let users: User[];
   /**
    * @type {number}
@@ -19,10 +20,6 @@
     return `${ms(Date.now() - new Date(timestamp).getTime())}${
       timeOnly ? "" : " ago"
     }`;
-  }
-
-  function refreshPage() {
-    location.reload();
   }
 </script>
 
@@ -48,7 +45,7 @@
       {/each}
     </Tabs.List>
 		{#each users as user (user.id)}
-			<Tabs.Content value={user.name}>{user.name}</Tabs.Content>
+			<Tabs.Content value={user.name}><UserPanel /></Tabs.Content>
 		{/each}
   </Tabs.Root>
 </div>
