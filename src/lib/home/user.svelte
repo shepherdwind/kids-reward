@@ -7,8 +7,8 @@
   import * as Dialog from "$lib/components/ui/dialog";
 </script>
 
-<div class="p-2 w-full">
-  <div class="flex gap-x-4 mb-4">
+<div class="w-full">
+  <div class="flex gap-x-4 mb-4 pt-2">
     <Dialog.Root>
       <Dialog.Trigger class={buttonVariants({ variant: "outline", class: "flex-1" })}>
         Add

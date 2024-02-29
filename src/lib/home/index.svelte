@@ -23,7 +23,7 @@
   }
 </script>
 
-<div class="w-full max-w-xl p-2">
+<div class="w-full max-w-xl p-4">
   <Tabs.Root class="divide-y divide-gray-900/5">
     <Tabs.List class="w-full">
       {#each users as user (user.id)}
