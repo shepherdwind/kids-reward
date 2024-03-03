@@ -21,17 +21,22 @@
       timeOnly ? "" : " ago"
     }`;
   }
+  let currentUser = users?.[0]?.name || '';
 </script>
 
 <div class="w-full max-w-xl p-4">
-  <Tabs.Root class="divide-y divide-gray-900/5">
+  <Tabs.Root value={currentUser} onValueChange={(value) => currentUser = value || ''}>
     <Tabs.List class="w-full">
       {#each users as user (user.id)}
-        <Tabs.Trigger value={user.name} class="w-1/2">
-          <Avatar>
+        <Tabs.Trigger value={user.name} class={currentUser === user.name ? 'h-24 w-2/3' :  'w-1/3 h-24'}>
+          {#if user.name === currentUser}
+          <Avatar class={currentUser === user.name ? '' : ''}>
             <AvatarImage alt={user.name} src={user.image} />
             <AvatarFallback>{user.name}</AvatarFallback>
           </Avatar>
+          {:else}
+            <div class="h-24 w-1" />
+          {/if}
           <div class="text-left pl-2">
             <h2 class="text-lg font-semibold">{user.name}</h2>
             <div class="flex items-center">
@@ -45,7 +50,7 @@
       {/each}
     </Tabs.List>
 		{#each users as user (user.id)}
-			<Tabs.Content value={user.name}><UserPanel /></Tabs.Content>
+			<Tabs.Content value={user.name}><UserPanel id={user.id} /></Tabs.Content>
 		{/each}
   </Tabs.Root>
 </div>
