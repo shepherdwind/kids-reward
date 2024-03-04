@@ -12,6 +12,8 @@
 
   let score = 1;
   let reason = isAdd ? "Eating well" : "";
+  let date = new Date().toISOString().split("T")[0];
+  let password = "";
   let open = false;
 
   const handleSubmit = () => {
@@ -23,15 +25,18 @@
       body: JSON.stringify({
         userId: id,
         score: isAdd ? +score : -score,
+        password,
         reason,
+        date,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res.success) {
           toast.success(`Score ${isAdd ? "added" : "used"} successfully`);
           open = false;
+        } else {
+          toast.error(res.error);
         }
       });
   };
@@ -75,6 +80,25 @@
             placeholder="Please input"
           />
         </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="date" class="text-right">Date</Label>
+          <Input
+            id="date"
+            name="date"
+            class="col-span-3"
+            type="date"
+            bind:value={date}
+          />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="password" class="text-right">Password</Label>
+          <Input
+            id="password"
+            name="password"
+            bind:value={password}
+            class="col-span-3"
+            type="password"
+          />
       </div>
       <Dialog.Footer class="items-end">
         <Button type="submit" class="w-1/3" variant="outline">Save</Button>

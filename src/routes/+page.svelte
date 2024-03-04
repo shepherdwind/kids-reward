@@ -13,5 +13,5 @@
     Reward
     <Switch />
   </h1>
-  <Index users={data?.users} duration={data?.duration} />
+  <Index users={data?.users} duration={data?.duration} rewards={data?.rewards} />
 </main>

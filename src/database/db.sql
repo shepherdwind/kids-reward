@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS reward (
   user_id INTEGER REFERENCES "users"(id),
   score SMALLINT,
   reason VARCHAR(100),
+  "date" DATE,
   "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
