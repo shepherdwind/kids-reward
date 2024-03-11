@@ -60,3 +60,8 @@ export const flyAndScale = (
         easing: cubicOut
     };
 };
+
+const pad = (n: number) => (n < 10 ? `0${n}` : n);
+export const formatDate = (date: Date) => {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+};

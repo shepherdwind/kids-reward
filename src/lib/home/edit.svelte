@@ -6,57 +6,66 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { toast } from "svelte-sonner";
+  import type { Reward } from "$database/type";
+  import { formatDate } from "../utils";
+  import { goto } from '$app/navigation';
 
-  export let isAdd = true;
-  export let id: number;
+  export let mode: 'add' | 'use' | 'delete' = 'add';
+  export let className = "";
+  export let reward: Partial<Reward>;
 
-  let score = 1;
-  let reason = isAdd ? "Eating well" : "";
-  let date = new Date().toISOString().split("T")[0];
+  let score = reward.score || 1;
+  let loading = false;
+  const isAdd = mode === "add";
+  let reason = reward.reason || isAdd ? "Eating well" : "";
+  let date = formatDate(reward.date || new Date());
   let password = "";
   let open = false;
 
   const handleSubmit = () => {
+    loading = true;
     fetch("/api/score", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: id,
+        userId: reward.user_id,
         score: isAdd ? +score : -score,
         password,
         reason,
         date,
+        mode: mode === "delete" ? "delete" : "add",
+        id: reward.id,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          toast.success(`Score ${isAdd ? "added" : "used"} successfully`);
+          toast.success(`Score ${mode} successfully`);
           open = false;
+          goto(window.location.href, { replaceState: true });
         } else {
           toast.error(res.error);
         }
-      });
+      })
+      .finally(() => {
+        loading = false;
+      })
   };
+  const upFirst = (str: string) => str[0].toUpperCase() + str.slice(1);
 </script>
 
 <Dialog.Root {open}>
   <Dialog.Trigger
-    class={buttonVariants({ variant: "outline", class: isAdd ? "flex-1" : "" })}
+    class={buttonVariants({ variant: "outline", class: className })}
     on:click={() => (open = true)}
   >
-    {#if isAdd}
-      Add<Star class="ml-2 h-4 w-4" />
-    {:else}
-      Use
-      <Use class="ml-2 h-4 w-4" />
-    {/if}
+    <slot />
   </Dialog.Trigger>
   <Dialog.Content class="mx-auto w-5/6">
     <Dialog.Header>
-      <Dialog.Title>{isAdd ? "Add" : "Use"} Stars</Dialog.Title>
+      <Dialog.Title>{upFirst(mode)} Stars</Dialog.Title>
     </Dialog.Header>
     <form on:submit|preventDefault={handleSubmit}>
       <div class="grid gap-4 py-4">
@@ -101,7 +110,7 @@
           />
       </div>
       <Dialog.Footer class="items-end">
-        <Button type="submit" class="w-1/3" variant="outline">Save</Button>
+        <Button type="submit" loading={loading} class="w-1/3" variant="outline">Save</Button>
       </Dialog.Footer>
     </form>
   </Dialog.Content>
