@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
   image VARCHAR(255),
   birthday DATE,
   score INTEGER DEFAULT 0,
+  used INTEGER DEFAULT 0,
   "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -26,3 +27,5 @@ INSERT INTO
   users (name, image, birthday)
 VALUES
   ('JioJio', '/jiojio.jpg', '2020-05-09');
+
+-- ALTER TABLE users ADD COLUMN used INTEGER DEFAULT 0;

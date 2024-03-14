@@ -4,6 +4,7 @@ export type User = {
   image: string;
   birthday: Date;
   score: number;
+  used: number;
   createdAt: Date;
 }
 export type Reward = {

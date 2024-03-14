@@ -8,7 +8,7 @@ export async function load() {
   ]);
   const duration = Date.now() - startTime
   return {
-    users: users,
+    users: users.sort((a, b) => a.id - b.id),
     rewards: rewards,
     duration: duration,
   }

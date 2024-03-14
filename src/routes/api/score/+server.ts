@@ -25,10 +25,42 @@ export const POST = async ({ request }) => {
     return json({ success: false, error: "Invalid password" });
   }
 
-  if (data.mode === 'delete') {
-    const ret = await db.query("DELETE FROM reward WHERE id = $1", [data.id]);
-    return json({ success: true, data: ret });
+  try {
+    await db.query("BEGIN");
+    if (data.mode === 'delete') {
+      const ret = await removeScore(data);
+      await db.query("COMMIT");
+      return ret;
+    }
+
+    const ret = await addScore(data);
+    await db.query("COMMIT");
+    return ret;
+  } catch (e) {
+    await db.query("ROLLBACK");
+    return json({ success: false, error: (e as Error).message });
   }
+};
+
+const removeScore = async (data: ScoreRequest) => {
+  if (data.score > 0) {
+    // delete from score
+    await db.query("UPDATE users SET score = score + $1 WHERE id = $2", [-data.score, data.userId]);
+  } else {
+    // delete from used
+    await db.query("UPDATE users SET used = used + $1 WHERE id = $2", [data.score, data.userId]);
+  }
+  const ret = await db.query("DELETE FROM reward WHERE id = $1", [data.id]);
+  return json({ success: true, data: ret });
+}
+
+const addScore = async (data: ScoreRequest) => {
+  if (data.score > 0) {
+    await db.query("UPDATE users SET score = score + $1 WHERE id = $2", [data.score, data.userId]);
+  } else {
+    await db.query("UPDATE users SET used = used + $1 WHERE id = $2", [-data.score, data.userId]);
+  }
+
 
   const ret = await db.query(
     "INSERT INTO reward (reason, score, date, user_id) VALUES ($1, $2, $3, $4)",

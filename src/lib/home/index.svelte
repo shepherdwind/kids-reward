@@ -18,23 +18,11 @@
   console.log("cost", duration);
   let currentUser = users?.[0]?.name || "";
 
-  const getUserScore = (userId: number) => {
-    const data = rewards.filter((reward) => reward.user_id === userId);
-    const gain = data
-      .filter((reward) => reward.score > 0)
-      .reduce((acc, reward) => acc + reward.score, 0);
-    const cost = data
-      .filter((reward) => reward.score < 0)
-      .reduce((acc, reward) => acc - reward.score, 0);
-    return [gain, cost];
-  };
-
   const scores = users.map((user) => {
-    const [gain, cost] = getUserScore(user.id);
     return {
       id: user.id,
-      gain,
-      cost,
+      gain: user.score,
+      cost: user.used,
     };
   });
 

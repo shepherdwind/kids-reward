@@ -65,3 +65,9 @@ const pad = (n: number) => (n < 10 ? `0${n}` : n);
 export const formatDate = (date: Date) => {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 };
+
+export function invariant(condition: any, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}

@@ -5,9 +5,10 @@
   export let id: number;
   import Star from "lucide-svelte/icons/star";
   import Use from "lucide-svelte/icons/star-off";
+  import Trash from "lucide-svelte/icons/trash";
   import { today, getLocalTimeZone } from "@internationalized/date";
   import * as Table from "$lib/components/ui/table";
-  import { formatDate } from "../utils";
+  import { formatDate, invariant } from "../utils";
  
   let value = today(getLocalTimeZone());
   export let rewards: Reward[];
@@ -16,6 +17,22 @@
     return value.day === date.getDate()
       && value.month === date.getMonth() + 1 && value.year === date.getFullYear();
   }) || [];
+
+  $: config = rewards.reduce((acc, reward) => {
+    const date = reward.date;
+    const day = date.getDate();
+    if (!acc[day]) {
+      acc[day] = { score: 0, used: 0 };
+    }
+
+    if (reward.score > 0) {
+      acc[day].score += reward.score;
+    } else {
+      acc[day].used += -reward.score;
+    }
+
+    return acc;
+  }, {} as Record<string, { score: number; used: number }>);
   $: initRaward = { user_id: id };
 </script>
 
@@ -29,9 +46,9 @@
       <Use class="ml-2 h-4 w-4" />
     </Edit>
   </div>
-  <Calendar bind:value={value} class="rounded-md border shadow w-full" />
+  <Calendar data={config} bind:value={value} class="rounded-md border shadow w-full" />
   <Table.Root class="mt-2">
-    <Table.Caption>Score within 2 days</Table.Caption>
+    <Table.Caption>Score within 1 days</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head>Reason</Table.Head>
@@ -48,7 +65,7 @@
           <Table.Cell>{formatDate(reward.date)}</Table.Cell>
           <Table.Cell>
             <Edit reward={reward} mode="delete" className="text-red-500">
-              Delete
+              <Trash />
             </Edit>
           </Table.Cell>
         </Table.Row>

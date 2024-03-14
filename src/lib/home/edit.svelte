@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
-  import Star from "lucide-svelte/icons/star";
-  import Use from "lucide-svelte/icons/star-off";
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { toast } from "svelte-sonner";
   import type { Reward } from "$database/type";
   import { formatDate } from "../utils";
-  import { goto } from '$app/navigation';
+  import LoaderCircle from "lucide-svelte/icons/loader-circle";
 
-  export let mode: 'add' | 'use' | 'delete' = 'add';
+  import { goto } from "$app/navigation";
+
+  export let mode: "add" | "use" | "delete" = "add";
   export let className = "";
   export let reward: Partial<Reward>;
 
@@ -51,14 +51,21 @@
       })
       .finally(() => {
         loading = false;
-      })
+      });
   };
-  const upFirst = (str: string) => str[0].toUpperCase() + str.slice(1);
+  const upFirst = (str: string) => {
+    if (!str[0]) return str;
+    return str[0].toUpperCase() + str.slice(1);
+  }
 </script>
 
 <Dialog.Root {open}>
   <Dialog.Trigger
-    class={buttonVariants({ variant: "outline", class: className })}
+    class={buttonVariants({
+      variant: "outline",
+      class: className,
+      size: mode === "delete" ? "icon" : "default",
+    })}
     on:click={() => (open = true)}
   >
     <slot />
@@ -108,10 +115,21 @@
             class="col-span-3"
             type="password"
           />
+        </div>
+        <Dialog.Footer class="items-end">
+          <Button
+            type="submit"
+            disabled={loading}
+            class="w-1/3"
+            variant="outline"
+          >
+            {#if loading}
+              <LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+            {/if}
+            Save
+          </Button>
+        </Dialog.Footer>
       </div>
-      <Dialog.Footer class="items-end">
-        <Button type="submit" loading={loading} class="w-1/3" variant="outline">Save</Button>
-      </Dialog.Footer>
     </form>
   </Dialog.Content>
 </Dialog.Root>

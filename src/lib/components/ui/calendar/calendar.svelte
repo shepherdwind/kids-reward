@@ -9,6 +9,7 @@
 	export let value: $$Props["value"] = undefined;
 	export let placeholder: $$Props["placeholder"] = undefined;
 	export let weekdayFormat: $$Props["weekdayFormat"] = "short";
+	export let data: Record<string, { score: number; used: number }> = {};
 
 	let className: $$Props["class"] = undefined;
 	export { className as class };
@@ -46,7 +47,7 @@
 						<Calendar.GridRow class="mt-2 w-full">
 							{#each weekDates as date}
 								<Calendar.Cell {date}>
-									<Calendar.Day {date} month={month.value} />
+									<Calendar.Day {date} month={month.value} data={data[date.day]} />
 								</Calendar.Cell>
 							{/each}
 						</Calendar.GridRow>
