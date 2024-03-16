@@ -13,6 +13,7 @@
   let value = today(getLocalTimeZone());
   export let rewards: Reward[];
   $: currentRewards = rewards.filter((reward) => {
+    if (!value) return false;
     const date = reward.date;
     return value.day === date.getDate()
       && value.month === date.getMonth() + 1 && value.year === date.getFullYear();

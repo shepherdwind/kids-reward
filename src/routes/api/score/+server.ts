@@ -2,6 +2,7 @@ import { json } from "@sveltejs/kit";
 import crypto from "crypto";
 import { COMMIT_SCORE_HASH  } from "$env/static/private";
 import { db } from "$database";
+import type { Reward } from "$database/type.js";
 
 interface ScoreRequest {
   mode: 'add' | 'delete';
@@ -43,12 +44,18 @@ export const POST = async ({ request }) => {
 };
 
 const removeScore = async (data: ScoreRequest) => {
-  if (data.score > 0) {
+  const rewards = await db.query<Reward>("SELECT * FROM reward WHERE id = $1", [data.id]);
+  const score = rewards.rows?.[0]?.score;
+  if (!score) {
+    return json({ success: false, error: "Invalid reward id" });
+  }
+
+  if (score > 0) {
     // delete from score
-    await db.query("UPDATE users SET score = score + $1 WHERE id = $2", [-data.score, data.userId]);
+    await db.query("UPDATE users SET score = score + $1 WHERE id = $2", [-score, data.userId]);
   } else {
     // delete from used
-    await db.query("UPDATE users SET used = used + $1 WHERE id = $2", [data.score, data.userId]);
+    await db.query("UPDATE users SET used = used + $1 WHERE id = $2", [score, data.userId]);
   }
   const ret = await db.query("DELETE FROM reward WHERE id = $1", [data.id]);
   return json({ success: true, data: ret });
