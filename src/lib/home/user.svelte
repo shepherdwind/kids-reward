@@ -7,70 +7,74 @@
   import Use from "lucide-svelte/icons/star-off";
   import Trash from "lucide-svelte/icons/trash";
   import { today, getLocalTimeZone } from "@internationalized/date";
-  import * as Table from "$lib/components/ui/table";
-  import { formatDate, invariant } from "../utils";
- 
+
   let value = today(getLocalTimeZone());
   export let rewards: Reward[];
-  $: currentRewards = rewards.filter((reward) => {
-    if (!value) return false;
-    const date = reward.date;
-    return value.day === date.getDate()
-      && value.month === date.getMonth() + 1 && value.year === date.getFullYear();
-  }) || [];
+  $: currentRewards =
+    rewards.filter((reward) => {
+      if (!value) return false;
+      const date = reward.date;
+      return (
+        value.day === date.getDate() &&
+        value.month === date.getMonth() + 1 &&
+        value.year === date.getFullYear()
+      );
+    }) || [];
 
-  $: config = rewards.reduce((acc, reward) => {
-    const date = reward.date;
-    const day = date.getDate();
-    if (!acc[day]) {
-      acc[day] = { score: 0, used: 0 };
-    }
+  $: config = rewards.reduce(
+    (acc, reward) => {
+      const date = reward.date;
+      const day = date.getDate();
+      if (!acc[day]) {
+        acc[day] = { score: 0, used: 0 };
+      }
 
-    if (reward.score > 0) {
-      acc[day].score += reward.score;
-    } else {
-      acc[day].used += -reward.score;
-    }
+      if (reward.score > 0) {
+        acc[day].score += reward.score;
+      } else {
+        acc[day].used += -reward.score;
+      }
 
-    return acc;
-  }, {} as Record<string, { score: number; used: number }>);
+      return acc;
+    },
+    {} as Record<string, { score: number; used: number }>,
+  );
   $: initRaward = { user_id: id };
 </script>
 
 <div class="w-full">
-  <div class="flex gap-x-4 mb-4 pt-2">
-    <Edit reward={initRaward} className="flex-1">
-      Add<Star class="ml-2 h-4 w-4" />
-    </Edit>
-    <Edit reward={initRaward} mode="use" >
-      Use
-      <Use class="ml-2 h-4 w-4" />
-    </Edit>
+  <Calendar data={config} bind:value class="rounded-md border shadow w-full" />
+  <div class="mt-2">
+    {#each currentRewards as reward (reward.id)}
+      <div class="flex items-center space-x-4 rounded-md border p-2 mt-2">
+        {#if reward.score > 0}
+          <Star class="h-4 w-4" />
+        {:else}
+          <Use class="h-4 w-4" />
+        {/if}
+        <div class="flex-1 space-y-1">
+          <p class="text-sm font-medium leading-none">{reward.reason}</p>
+          <p class="text-sm text-muted-foreground">
+            {reward.score}
+          </p>
+        </div>
+        <Edit {reward} mode="delete">
+          <Trash />
+        </Edit>
+      </div>
+    {/each}
   </div>
-  <Calendar data={config} bind:value={value} class="rounded-md border shadow w-full" />
-  <Table.Root class="mt-2">
-    <Table.Caption>Score within 1 days</Table.Caption>
-    <Table.Header>
-      <Table.Row>
-        <Table.Head>Reason</Table.Head>
-        <Table.Head>Score</Table.Head>
-        <Table.Head>Date</Table.Head>
-        <Table.Head>Edit</Table.Head>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      {#each currentRewards as reward (reward.id)}
-        <Table.Row>
-          <Table.Cell class="font-medium">{reward.reason}</Table.Cell>
-          <Table.Cell>{reward.score}</Table.Cell>
-          <Table.Cell>{formatDate(reward.date)}</Table.Cell>
-          <Table.Cell>
-            <Edit reward={reward} mode="delete" className="text-red-500">
-              <Trash />
-            </Edit>
-          </Table.Cell>
-        </Table.Row>
-      {/each}
-    </Table.Body>
-  </Table.Root>
+</div>
+
+<div
+  class="flex gap-x-4 p-2 border-t absolute w-full
+  left-0 bottom-0 bg-background"
+>
+  <Edit reward={initRaward} className="flex-1 border-r">
+    Add<Star class="ml-2 h-4 w-4" />
+  </Edit>
+  <Edit reward={initRaward} mode="use" className="flex-1">
+    Use
+    <Use class="ml-2 h-4 w-4" />
+  </Edit>
 </div>

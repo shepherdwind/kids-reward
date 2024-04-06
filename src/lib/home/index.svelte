@@ -48,10 +48,13 @@
           {:else}
             <div class="h-24 w-1" />
           {/if}
-          <div class="text-left pl-2">
-            <h2 class="text-lg font-semibold">{user.name} ({
-              (scores[index]?.gain || 0) - (scores[index]?.cost || 0)
-            })</h2>
+          <div
+            class={currentUser === user.name ? "text-left pl-2" : "text-left"}
+          >
+            <h2 class="text-lg font-semibold">
+              {user.name} ({(scores[index]?.gain || 0) -
+                (scores[index]?.cost || 0)})
+            </h2>
             <div class="flex items-center">
               <StarIcon className="text-yellow-400 w-5 h-5" />
               <span class="text-yellow-600 font-semibold mx-1">
