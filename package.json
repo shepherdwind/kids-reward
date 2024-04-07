@@ -17,7 +17,6 @@
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@types/ms": "^0.7.34",
     "@vite-pwa/assets-generator": "^0.2.4",
-    "@vite-pwa/sveltekit": "^0.4.0",
     "autoprefixer": "^10.4.14",
     "dotenv-expand": "^11.0.4",
     "postcss": "^8.4.23",
