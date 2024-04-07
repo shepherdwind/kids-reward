@@ -1,9 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig, loadEnv } from 'vite'
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import dotenvExpand from 'dotenv-expand';
-
-const generateSW = process.env.GENERATE_SW === 'true';
 
 export default defineConfig(({ mode }) => {
   // Only modify process.env in development mode
