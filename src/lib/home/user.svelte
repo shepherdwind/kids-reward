@@ -67,8 +67,7 @@
 </div>
 
 <div
-  class="flex gap-x-4 p-2 border-t absolute w-full
-  left-0 bottom-0 bg-background"
+  class="flex gap-x-4 p-4 border-t w-full left-0 bottom-0 bg-background fixed"
 >
   <Edit reward={initRaward} className="flex-1 border-r">
     Add<Star class="ml-2 h-4 w-4" />

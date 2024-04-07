@@ -1,6 +1,7 @@
 import { json } from "@sveltejs/kit";
 import crypto from "crypto";
-import { COMMIT_SCORE_HASH  } from "$env/static/private";
+import { COMMIT_SCORE_HASH } from "$env/static/private";
+import type { RequestEvent } from "@sveltejs/kit";
 import { db } from "$database";
 import type { Reward } from "$database/type.js";
 
@@ -20,7 +21,7 @@ const createHash = (data: string) => {
   return hash.digest("hex");
 }
 
-export const POST = async ({ request }) => {
+export async function POST({ request }: RequestEvent) {
   const data: ScoreRequest = await request.json();
   if (createHash(data.password) !== COMMIT_SCORE_HASH) {
     return json({ success: false, error: "Invalid password" });
@@ -41,7 +42,7 @@ export const POST = async ({ request }) => {
     await db.query("ROLLBACK");
     return json({ success: false, error: (e as Error).message });
   }
-};
+}
 
 const removeScore = async (data: ScoreRequest) => {
   const rewards = await db.query<Reward>("SELECT * FROM reward WHERE id = $1", [data.id]);
