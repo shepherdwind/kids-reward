@@ -56,7 +56,7 @@
   const upFirst = (str: string) => {
     if (!str[0]) return str;
     return str[0].toUpperCase() + str.slice(1);
-  }
+  };
 </script>
 
 <Dialog.Root {open}>
@@ -67,6 +67,7 @@
       size: mode === "delete" ? "icon" : "default",
     })}
     on:click={() => (open = true)}
+    asChild={mode !== "delete"}
   >
     <slot />
   </Dialog.Trigger>

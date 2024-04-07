@@ -67,13 +67,17 @@
 </div>
 
 <div
-  class="flex gap-x-4 p-4 border-t w-full left-0 bottom-0 bg-background fixed"
+  class="flex gap-x-4 px-4 border-t w-full left-0 bottom-0 bg-background fixed"
 >
-  <Edit reward={initRaward} className="flex-1 border-r">
-    Add<Star class="ml-2 h-4 w-4" />
+  <Edit reward={initRaward}>
+    <div class="flex-1 flex items-center justify-center border-r py-2">
+      Add<Star class="ml-2 h-4 w-4" />
+    </div>
   </Edit>
   <Edit reward={initRaward} mode="use" className="flex-1">
-    Use
-    <Use class="ml-2 h-4 w-4" />
+    <div class="flex-1 flex items-center justify-center">
+      Use
+      <Use class="ml-2 h-4 w-4" />
+    </div>
   </Edit>
 </div>
