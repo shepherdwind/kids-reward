@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+    "pwa": "pwa-assets-generator --preset minimal-2023 static/logo.png"
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^4.0.3",
