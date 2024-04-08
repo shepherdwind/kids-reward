@@ -20,7 +20,8 @@
   let reason = reward.reason || isAdd ? "Eating well" : "";
   let date = formatDate(reward.date || new Date());
   let password = "";
-  let open = false;
+
+  $: open = false;
 
   const handleSubmit = () => {
     loading = true;
@@ -59,7 +60,7 @@
   };
 </script>
 
-<Dialog.Root {open}>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)}>
   <Dialog.Trigger
     class={buttonVariants({
       variant: "outline",
@@ -69,7 +70,16 @@
     on:click={() => (open = true)}
     asChild={mode !== "delete"}
   >
-    <slot />
+    {#if mode !== "delete"}
+      <div
+        on:click={() => (open = true)}
+        class={`flex-1 flex items-center justify-center py-3 ${className}`}
+      >
+        <slot />
+      </div>
+    {:else}
+      <slot />
+    {/if}
   </Dialog.Trigger>
   <Dialog.Content class="mx-auto w-5/6">
     <Dialog.Header>

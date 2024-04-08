@@ -43,8 +43,12 @@
 </script>
 
 <div class="w-full">
-  <Calendar data={config} bind:value class="rounded-md border shadow w-full" />
-  <div class="mt-2">
+  <Calendar
+    data={config}
+    bind:value
+    class="rounded-md border shadow w-full mt-3"
+  />
+  <div class="mt-3">
     {#each currentRewards as reward (reward.id)}
       <div class="flex items-center space-x-4 rounded-md border p-2 mt-2">
         {#if reward.score > 0}
@@ -67,17 +71,12 @@
 </div>
 
 <div
-  class="flex gap-x-4 px-4 border-t w-full left-0 bottom-0 bg-background fixed"
+  class="flex gap-x-4 px-4 border-t border-b w-full left-0 bottom-0 bg-background fixed"
 >
-  <Edit reward={initRaward}>
-    <div class="flex-1 flex items-center justify-center border-r py-2">
-      Add<Star class="ml-2 h-4 w-4" />
-    </div>
+  <Edit reward={initRaward} className="border-r">
+    Add <Star class="ml-2 h-4 w-4" />
   </Edit>
-  <Edit reward={initRaward} mode="use" className="flex-1">
-    <div class="flex-1 flex items-center justify-center">
-      Use
-      <Use class="ml-2 h-4 w-4" />
-    </div>
+  <Edit reward={initRaward} mode="use">
+    Use <Use class="ml-2 h-4 w-4" />
   </Edit>
 </div>
