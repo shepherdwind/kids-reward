@@ -31,7 +31,7 @@
     "data-[unavailable]:text-destructive-foreground data-[unavailable]:line-through",
     // Outside months
     "data-[outside-month]:pointer-events-none data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-50 [&[data-outside-month][data-selected]]:bg-accent/50 [&[data-outside-month][data-selected]]:text-muted-foreground [&[data-outside-month][data-selected]]:opacity-30",
-    className
+    className,
   )}
   {...$$restProps}
   let:selected
@@ -40,13 +40,13 @@
   let:builder
 >
   <slot {selected} {disabled} {unavailable} {builder}>
-    {#if data.score > 0 && !disabled}
+    {#if data?.score > 0 && !disabled}
       <span class="absolute top-0 right-1 text-xs text-green-500"
         >+{data.score}</span
       >
     {/if}
-    {date.day}
-    {#if data.used > 0 && !disabled}
+    {date?.day}
+    {#if data?.used > 0 && !disabled}
       <span
         class={`absolute ${
           data.score > 0 ? "bottom-0 left-1" : "top-0 right-1"

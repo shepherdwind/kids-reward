@@ -18,7 +18,7 @@
   console.log("cost", duration);
   let currentUser = users?.[0]?.name || "";
 
-  const scores = users.map((user) => {
+  $: scores = users.map((user) => {
     return {
       id: user.id,
       gain: user.score,

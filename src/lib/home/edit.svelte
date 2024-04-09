@@ -4,11 +4,10 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { toast } from "svelte-sonner";
+  import { invalidateAll } from "$app/navigation";
   import type { Reward } from "$database/type";
   import { formatDate } from "../utils";
   import LoaderCircle from "lucide-svelte/icons/loader-circle";
-
-  import { goto } from "$app/navigation";
 
   export let mode: "add" | "use" | "delete" = "add";
   export let className = "";
@@ -45,7 +44,7 @@
         if (res.success) {
           toast.success(`Score ${mode} successfully`);
           open = false;
-          goto(window.location.href, { replaceState: true });
+          invalidateAll();
         } else {
           toast.error(res.error);
         }
