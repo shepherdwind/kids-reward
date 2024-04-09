@@ -6,7 +6,13 @@
   import Star from "lucide-svelte/icons/star";
   import Use from "lucide-svelte/icons/star-off";
   import Trash from "lucide-svelte/icons/trash";
-  import { today, getLocalTimeZone } from "@internationalized/date";
+  import {
+    today,
+    getLocalTimeZone,
+    type DateValue,
+    parseDate,
+  } from "@internationalized/date";
+  import { goto } from "$app/navigation";
 
   let value = today(getLocalTimeZone());
   export let rewards: Reward[];
@@ -40,13 +46,24 @@
     {} as Record<string, { score: number; used: number }>,
   );
   $: initRaward = { user_id: id };
+
+  const handleDateChange = (date?: DateValue) => {
+    if (!date) return;
+    value = parseDate(date.toString());
+  };
 </script>
 
 <div class="w-full">
   <Calendar
     data={config}
-    bind:value
+    {value}
     class="rounded-md border shadow w-full mt-3"
+    onValueChange={handleDateChange}
+    onPlaceholderChange={(date) => {
+      if (!date) return;
+      goto(`?date=${date.year}-${date.month}-${date.day}`);
+    }}
+    pagedNavigation
   />
   <div class="mt-3">
     {#each currentRewards as reward (reward.id)}
@@ -70,13 +87,13 @@
   </div>
 </div>
 
-<div
-  class="flex gap-x-4 px-4 border-t border-b w-full left-0 bottom-0 bg-background fixed"
->
-  <Edit reward={initRaward} className="border-r">
-    Add <Star class="ml-2 h-4 w-4" />
-  </Edit>
-  <Edit reward={initRaward} mode="use">
-    Use <Use class="ml-2 h-4 w-4" />
-  </Edit>
+<div class="left-0 bottom-0 bg-background fixed flex w-full justify-center">
+  <div class="flex gap-x-4 px-4 border w-full max-w-xl">
+    <Edit reward={initRaward} className="border-r">
+      Add <Star class="ml-2 h-4 w-4" />
+    </Edit>
+    <Edit reward={initRaward} mode="use">
+      Use <Use class="ml-2 h-4 w-4" />
+    </Edit>
+  </div>
 </div>

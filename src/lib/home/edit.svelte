@@ -42,9 +42,15 @@
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          toast.success(`Score ${mode} successfully`);
+          // toast.success(`Score ${mode} successfully`);
           open = false;
-          invalidateAll();
+          toast.promise(invalidateAll(), {
+            loading: "Loading...",
+            success: () => {
+              return `Score ${mode} successfully`;
+            },
+            error: "Reload page error, try reload youself",
+          });
         } else {
           toast.error(res.error);
         }

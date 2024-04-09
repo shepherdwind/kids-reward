@@ -3,7 +3,9 @@
   import * as Calendar from ".";
   import { cn } from "$lib/utils";
 
-  type $$Props = CalendarPrimitive.Props;
+  type $$Props = CalendarPrimitive.Props & {
+    data: Record<string, { score: number; used: number }>;
+  };
   type $$Events = CalendarPrimitive.Events;
 
   export let value: $$Props["value"] = undefined;
@@ -50,7 +52,7 @@
                   <Calendar.Day
                     {date}
                     month={month.value}
-                    data={data[date.day]}
+                    data={data[date.day] || { score: 0, used: 0 }}
                   />
                 </Calendar.Cell>
               {/each}

@@ -3,12 +3,14 @@
   import { buttonVariants } from "$lib/components/ui/button";
   import { cn } from "$lib/utils";
 
-  type $$Props = CalendarPrimitive.DayProps;
+  type $$Props = CalendarPrimitive.DayProps & {
+    data: { score: number; used: number };
+  };
   type $$Events = CalendarPrimitive.DayEvents;
 
   export let date: $$Props["date"];
   export let month: $$Props["month"];
-  export let data: { score: number; used: number } = { score: 0, used: 0 };
+  export let data: $$Props["data"] = { score: 0, used: 0 };
   let className: $$Props["class"] = undefined;
   export { className as class };
 </script>
@@ -24,7 +26,7 @@
     "",
     // Selected
     // "data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:opacity-100 data-[selected]:hover:bg-primary data-[selected]:hover:text-primary-foreground data-[selected]:focus:bg-primary data-[selected]:focus:text-primary-foreground",
-    "[&[data-today]:not([data-selected])]:bg-accent [&[data-today]:not([data-selected])]:text-accent-foreground",
+    "[&[data-today]]:font-bold [&[data-today]:not([data-selected])]:text-accent-foreground",
     // Disabled
     "data-[disabled]:text-muted-foreground data-[disabled]:opacity-50",
     // Unavailable
