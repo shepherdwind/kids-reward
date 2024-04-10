@@ -6,16 +6,21 @@
   import Star from "lucide-svelte/icons/star";
   import Use from "lucide-svelte/icons/star-off";
   import Trash from "lucide-svelte/icons/trash";
+  import { toast } from "svelte-sonner";
+
   import {
     today,
     getLocalTimeZone,
     type DateValue,
     parseDate,
+    CalendarDate,
   } from "@internationalized/date";
   import { goto } from "$app/navigation";
 
-  let value = today(getLocalTimeZone());
+  export let value: CalendarDate;
   export let rewards: Reward[];
+  export let setDate: (date: DateValue) => void;
+
   $: currentRewards =
     rewards.filter((reward) => {
       if (!value) return false;
@@ -49,7 +54,7 @@
 
   const handleDateChange = (date?: DateValue) => {
     if (!date) return;
-    value = parseDate(date.toString());
+    setDate(date);
   };
 </script>
 
@@ -61,7 +66,16 @@
     onValueChange={handleDateChange}
     onPlaceholderChange={(date) => {
       if (!date) return;
-      goto(`?date=${date.year}-${date.month}-${date.day}`);
+      if (date.year === value.year && date.month === value.month) return;
+
+      const newDate = `${date.year}-${date.month}-${value.day}`;
+
+      const t = toast.loading("Loading...");
+      setDate(new CalendarDate(date.year, date.month, value.day));
+
+      goto(`?date=${newDate}`).then(() => {
+        toast.dismiss(t);
+      });
     }}
     pagedNavigation
   />

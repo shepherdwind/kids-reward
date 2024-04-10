@@ -4,10 +4,18 @@
     AvatarFallback,
     Avatar,
   } from "$lib/components/ui/avatar";
+  import { page } from "$app/stores";
+
   import * as Tabs from "$lib/components/ui/tabs";
   import StarIcon from "../star.svelte";
   import UserPanel from "./user.svelte";
   import type { User, Reward } from "../../database/type";
+  import {
+    type DateValue,
+    parseDate,
+    CalendarDate,
+  } from "@internationalized/date";
+
   export let users: User[];
   export let rewards: Reward[];
   /**
@@ -18,6 +26,13 @@
   console.log("cost", duration);
   let currentUser = users?.[0]?.name || "";
 
+  // get query date from url
+  const date = new Date($page.url.searchParams.get("date") || Date.now());
+  $: selectedDate = new CalendarDate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  );
   $: scores = users.map((user) => {
     return {
       id: user.id,
@@ -26,7 +41,9 @@
     };
   });
 
-  // console.log(rewards, users, scores);
+  const setDate = (date: DateValue) => {
+    selectedDate = parseDate(date.toString());
+  };
 </script>
 
 <div class="w-full max-w-xl p-4">
@@ -73,6 +90,8 @@
       <Tabs.Content value={user.name}>
         <UserPanel
           rewards={rewards.filter((o) => o.user_id === user.id)}
+          value={selectedDate}
+          {setDate}
           id={user.id}
         />
       </Tabs.Content>
